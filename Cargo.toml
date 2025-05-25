@@ -2,7 +2,7 @@
 name = "runefix-core"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.70"
+rust-version = "1.85"
 
 description = "Unicode character display width engine supporting CJK, emoji, and grapheme clusters"
 readme = "README.md"

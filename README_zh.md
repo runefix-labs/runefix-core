@@ -4,7 +4,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/runefix-core)](https://crates.io/crates/runefix-core)
 [![Docs.rs](https://img.shields.io/docsrs/runefix-core)](https://docs.rs/runefix-core)
-[![Rust Version](https://img.shields.io/badge/rust-1.70%2B-orange)](https://www.rust-lang.org)
+[![Rust Version](https://img.shields.io/badge/rust-1.85%2B-orange)](https://www.rust-lang.org)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](./LICENSE)
 [![CI](https://github.com/runefix-labs/runefix-core/actions/workflows/ci.yml/badge.svg)](https://github.com/runefix-labs/runefix-core/actions/workflows/ci.yml)
 
