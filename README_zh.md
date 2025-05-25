@@ -70,9 +70,9 @@ assert_eq!(w, 1);  // markdown 渲染通常将 emoji 视为宽度 1
 use runefix_core::RuneDisplayWidth;
 
 fn main() {
-    println!("{}", "你".rune_width());           // 输出: 2
-    println!("{}", "😂".rune_width());           // 输出: 2
-    println!("{}", "你a1👇".rune_width_total()); // 输出: 6
+    println!("{}", "你".rune_width());         // 输出: 2
+    println!("{}", "😂".rune_width());         // 输出: 2
+    println!("{}", "你a1👇".display_width());  // 输出: 6
 }
 ```
 

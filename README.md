@@ -71,9 +71,9 @@ You can also override policies dynamically at runtime for your renderer.
 use runefix_core::RuneDisplayWidth;
 
 fn main() {
-    println!("{}", "你".rune_width());           // Output: 2
-    println!("{}", "😂".rune_width());           // Output: 2
-    println!("{}", "你a1👇".rune_width_total()); // Output: 6
+    println!("{}", "你".rune_width());         // Output: 2
+    println!("{}", "😂".rune_width());         // Output: 2
+    println!("{}", "你a1👇".display_width());  // Output: 6
 }
 ```
 
