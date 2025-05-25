@@ -43,11 +43,10 @@ pub use grapheme::{
     split_by_width
 };
 pub use ext::RuneDisplayWidth;
-pub use version::get_char_table_version;
+pub use consts::UNICODE_VERSION;
 
 // Internal modules (not re-exported directly)
 mod consts;
-mod version;
 mod rules;
 mod width;
 mod grapheme;

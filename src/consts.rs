@@ -1,6 +1,6 @@
-/// Char table version used by this build (auto-synced).
-/// auto-updated: 2025-05-25
-pub const CHAR_TABLE_VERSION: &str = "15.1.0";
+/// Unicode Version used by this build (auto-synced).
+/// auto-updated: 2025-05-26
+pub const UNICODE_VERSION: &str = "16.0.0";
 
 #[allow(dead_code)]
 /// ⚠️ Deprecated: `DOUBLE_WIDTH_BLOCKS` is a static Unicode block-based heuristic.

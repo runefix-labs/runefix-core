@@ -85,7 +85,7 @@ class CharTableIntegrator:
             shutil.rmtree(self.extract_dir)
         self.extract_dir.mkdir()
         with tarfile.open(self.archive_path, "r:gz") as tar:
-            tar.extractall(path=self.extract_dir)
+            tar.extractall(path=self.extract_dir, filter="data")
 
     def copy_json_data(self):
         """
@@ -108,28 +108,35 @@ class CharTableIntegrator:
 
     def update_consts_rs(self):
         """
-        Update or insert the CHAR_TABLE_VERSION in consts.rs.
+        Update or insert the UNICODE_VERSION in consts.rs.
         """
         today = date.today().isoformat()
-        print(f"🛠️ Updating CHAR_TABLE_VERSION in consts.rs → {self.version} @ {today}")
+        print(f"🛠️ Updating UNICODE_VERSION in consts.rs → {self.version} @ {today}")
         content = CONST_RS_PATH.read_text()
 
-        version_block = (
-            f'/// Char table version used by this build (auto-synced).\n'
-            f'/// auto-updated: {today}\n'
-            f'pub const CHAR_TABLE_VERSION: &str = "{self.version}";'
-        )
+        lines = content.splitlines()
+        new_lines = []
+        replaced = False
 
-        if "CHAR_TABLE_VERSION" in content:
-            updated = re.sub(
-                r'(?m)^/// Char table version used by this build (auto-synced).\n/// auto-updated: .*\npub const CHAR_TABLE_VERSION: &str = ".*?";',
-                version_block,
-                content
-            )
-        else:
-            updated = content.rstrip() + '\n\n' + version_block + '\n'
+        for i in range(len(lines)):
+            if "pub const UNICODE_VERSION: &str" in lines[i]:
+                new_lines[-2:] = [  # Replace previous comment and const
+                    f'/// Unicode Version used by this build (auto-synced).',
+                    f'/// auto-updated: {today}',
+                    f'pub const UNICODE_VERSION: &str = "{self.version}";'
+                ]
+                replaced = True
+            else:
+                new_lines.append(lines[i])
 
-        CONST_RS_PATH.write_text(updated)
+        if not replaced:
+            # If not found, add at the end
+            new_lines.append("")
+            new_lines.append(f'/// Unicode Version used by this build (auto-synced).')
+            new_lines.append(f'/// auto-updated: {today}')
+            new_lines.append(f'pub const UNICODE_VERSION: &str = "{self.version}";')
+
+        CONST_RS_PATH.write_text("\n".join(new_lines) + "\n")
 
     def clean_up(self):
         """
@@ -150,12 +157,12 @@ class CharTableIntegrator:
         self.copy_json_data()
         self.update_consts_rs()
         self.clean_up()
-        print(f"\n🎉 Integration complete! char-table v{self.version} is now embedded.\n")
+        print(f"\n🎉 Integration complete! Unicode Version v{self.version} is now embedded.\n")
 
 
 def main():
     parser = argparse.ArgumentParser(description="Integrate char-table into runefix-rs.")
-    parser.add_argument("--version", required=True, help="Target char-table version, e.g., 15.1.0")
+    parser.add_argument("--version", required=True, help="Target Unicode Version, e.g., 15.1.0")
     args = parser.parse_args()
 
     integrator = CharTableIntegrator(args.version)
