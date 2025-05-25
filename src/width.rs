@@ -4,8 +4,13 @@ use crate::rules::emoji::is_emoji;
 use crate::rules::hangul::is_hangul;
 use crate::rules::punct::is_fullwidth_punct;
 use crate::rules::variants::is_fullwidth_variant;
+#[cfg(feature = "policy")]
+use crate::policy::WidthPolicy;
 
-/// Returns the display width of a grapheme in terminal environments.
+/// Returns the display width of a grapheme cluster for terminal environments.
+///
+/// This API is always available, and automatically falls back to a built-in strategy
+/// if the `policy` feature is not enabled.
 ///
 /// This function determines how many columns a grapheme cluster (i.e., a user-perceived character)
 /// occupies when rendered in a monospace terminal or console. It follows Unicode-aware rules with
@@ -37,42 +42,119 @@ use crate::rules::variants::is_fullwidth_variant;
 /// # Example (internal usage only)
 ///
 /// ```rust,ignore
-/// // This function is crate-private and used internally:
+/// // Example usage:
+/// // Widths follow terminal-style behavior (CJK = 2, emoji = 2)
 /// assert_eq!(get_display_width("R"), 1);
 /// assert_eq!(get_display_width("語"), 2);
 /// assert_eq!(get_display_width("🦀"), 2);
 /// assert_eq!(get_display_width("\x00"), 0);
 /// ```
+///
+/// # Note
+///
+/// If the `policy` feature is enabled, prefer using [`display_width_with_policy()`]  
+/// instead of [`get_display_width()`] to apply environment-specific width rules.
+#[cfg(not(feature = "policy"))]
 pub(crate) fn get_display_width(s: &str) -> usize {
-    let mut chars = s.chars();
+    DefaultPolicy.resolve_width(s)
+}
 
-    // Handle single-character graphemes
-    if let (Some(ch), None) = (chars.next(), chars.next()) {
-        if ch.is_control() {
-            return 0;
+#[cfg(feature = "policy")]
+pub(crate) fn get_display_width(s: &str) -> usize {
+    WidthPolicy::terminal().resolve_width(s)
+}
+
+/// Grapheme width lookup using a custom width policy.
+///
+/// Requires enabling `--features policy`.
+///
+/// # Parameters
+/// - `s`: grapheme cluster (as `&str`)
+/// - `policy`: custom `WidthPolicy`, or fallback to `.terminal()` if `None`
+///
+/// # Use Case
+/// Supports runtime customization of width behavior,
+/// enabling environment-specific layout strategies (e.g. markdown, TUI, logs).
+/// 
+/// # Returns
+/// - width = `0`, `1`, or `2`
+///
+/// # Strategy
+/// - Each rule uses `policy.cjk`, `policy.emoji`, `policy.variant`, etc.
+///
+#[cfg(feature = "policy")]
+pub fn display_width_with_policy(s: &str, policy: Option<&WidthPolicy>) -> usize {
+    policy.unwrap_or(&WidthPolicy::terminal()).resolve_width(s)
+}
+
+#[cfg(feature = "policy")]
+impl WidthPolicy {
+    pub fn resolve_width(&self, s: &str) -> usize {
+        let mut chars = s.chars();
+
+        if let (Some(ch), None) = (chars.next(), chars.next()) {
+            if ch.is_control() {
+                return 0;
+            }
+
+            if ch <= '\u{007F}' {
+                return 1;
+            }
+
+            if is_cjk(s) || is_kana(s) || is_hangul(s) {
+                return self.cjk;
+            }
+
+            if is_fullwidth_variant(s) || is_fullwidth_punct(s) {
+                return self.variant;
+            }
         }
 
-        if ch <= '\u{007F}' {
-            return 1;
+        if is_emoji(s) {
+            return self.emoji;
         }
 
-        if is_cjk(s)
-            || is_kana(s)
-            || is_hangul(s)
-            || is_fullwidth_variant(s)
-            || is_fullwidth_punct(s)
-        {
+        self.fallback
+    }
+}
+
+/// Default fallback policy used internally when the `policy` feature is disabled.
+/// This struct is not exposed publicly and is not intended for customization.
+#[cfg(not(feature = "policy"))]
+struct DefaultPolicy;
+
+#[cfg(not(feature = "policy"))]
+impl DefaultPolicy {
+    /// Internal width resolution logic for DefaultPolicy.
+    fn resolve_width(&self, s: &str) -> usize {
+        let mut chars = s.chars();
+
+        if let (Some(ch), None) = (chars.next(), chars.next()) {
+            if ch.is_control() {
+                return 0;
+            }
+
+            if ch <= '\u{007F}' {
+                return 1;
+            }
+
+            if is_cjk(s) || is_kana(s) || is_hangul(s) {
+                return 2;
+            }
+
+            if is_fullwidth_variant(s) || is_fullwidth_punct(s) {
+                return 2;
+            }
+        }
+
+        // Emoji lookup is deferred to the end for two reasons:
+        // - It supports multi-codepoint graphemes (e.g. "👩‍❤️‍💋‍👨"), which cannot be matched earlier.
+        // - The emoji dataset is broad and may include symbols like "©" or "™",
+        //   which are normally rendered with width 1 unless followed by variation selectors.
+        if is_emoji(s) {
             return 2;
         }
-    }
 
-    // Emoji lookup is deferred to the end for two reasons:
-    // - It supports multi-codepoint graphemes (e.g. "👩‍❤️‍💋‍👨"), which cannot be matched earlier.
-    // - The emoji dataset is broad and may include symbols like "©" or "™",
-    //   which are normally rendered with width 1 unless followed by variation selectors.
-    if is_emoji(s) {
-        return 2;
+        1
     }
-
-    1
 }

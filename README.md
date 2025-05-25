@@ -37,6 +37,34 @@ This includes:
 - ✅ Fully reproducible datasets, powered by [char-table](https://github.com/runefix-labs/char-table)
 - ✅ Language bindings planned for JS / Python / Go and more
 
+## 🧩 Optional: Runtime Width Policies
+
+> 🧪 `--features policy` required
+
+By default, `runefix-core` uses the **terminal layout policy**, where both emoji and CJK characters occupy 2 columns. \
+You can optionally enable runtime policies to adapt to other rendering environments:
+```toml
+# Cargo.toml
+runefix-core = { version = "0.1", features = ["policy"] }
+```
+Then:
+```rust
+use runefix_core::{WidthPolicy, display_width_with_policy};
+
+let w = display_width_with_policy("😂", Some(&WidthPolicy::markdown()));
+assert_eq!(w, 1);  // markdown prefers emoji width = 1
+```
+
+## 🧠 Built-in Policies
+
+| Policy       | Emoji | CJK | Variant | Use case                          |
+| ------------ | ----- | --- | ------- | --------------------------------- |
+| `terminal()` | 2     | 2   | 2       | Default. Best for terminal apps   |
+| `markdown()` | 1     | 2   | 2       | GitHub / Typora / table renderers |
+| `compact()`  | 1     | 1   | 1       | Logs, status bars, tight layouts  |
+
+You can also override policies dynamically at runtime for your renderer.
+
 ## 🚀 Quick Example
 
 ```rust

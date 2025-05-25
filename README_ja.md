@@ -36,6 +36,35 @@
 - ✅ [char-table](https://github.com/runefix-labs/char-table) による再現可能なデータセット 
 - ✅ JS / Python / Go などの他言語バインディングを将来的に提供予定
 
+## 🧩 オプション機能：実行時幅ポリシー
+
+> 🧪 `--features policy` が必要です
+
+`runefix-core` はデフォルトで **ターミナルポリシー**（emoji と CJK を幅 2 として扱う）を使用します。\
+Markdown やログビューアなど、他の表示環境に合わせたい場合は実行時ポリシーを有効にできます：
+
+```toml
+# Cargo.toml
+runefix-core = { version = "0.1", features = ["policy"] }
+```
+Rustコードでは以下のように使えます：
+```rust
+use runefix_core::{WidthPolicy, display_width_with_policy};
+
+let w = display_width_with_policy("😂", Some(&WidthPolicy::markdown()));
+assert_eq!(w, 1);  // Markdownではemojiの幅は1が望ましい
+```
+
+## 🧠 組み込みポリシー一覧
+
+| ポリシー名     | Emoji | CJK | Variant | 想定用途                     |
+| ------------ | ----- | --- | ------- |-----------------------------|
+| `terminal()` | 2     | 2   | 2       | デフォルト。ターミナルUI向け    |
+| `markdown()` | 1     | 2   | 2       | GitHubやTypora等のMarkdown用 |
+| `compact()`  | 1     | 1   | 1       | ログ、ステータスバー、狭いUIなど |
+
+ポリシーは実行時に動的に作成・カスタマイズも可能です。
+
 ## 🚀 クイック例（Quick Example）
 
 ```rust
