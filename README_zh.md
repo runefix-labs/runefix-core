@@ -6,7 +6,7 @@
 [![Docs.rs](https://img.shields.io/docsrs/runefix-core)](https://docs.rs/runefix-core)
 [![Rust Version](https://img.shields.io/badge/rust-1.85%2B-orange)](https://www.rust-lang.org)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg)](./LICENSE)
-[![CI](https://github.com/runefix-labs/runefix-core/actions/workflows/ci.yml/badge.svg)](https://github.com/runefix-labs/runefix-core/actions/workflows/ci.yml)
+[![CI](https://github.com/runefix-labs/runefix-core/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/runefix-labs/runefix-core/actions/workflows/ci.yml)
 
 [English](./README.md) | **简体中文** | [日本語](./README_ja.md)
 
