@@ -1,0 +1,33 @@
+[package]
+name = "runefix-core"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.70"
+
+description = "Unicode character display width engine supporting CJK, emoji, and grapheme clusters"
+readme = "README.md"
+keywords = ["unicode", "cjk", "emoji", "display-width", "grapheme"]
+categories = ["text-processing", "development-tools", "localization"]
+
+license = "MIT OR Apache-2.0"
+authors = ["Pokeya Z. Chen"]
+repository = "https://github.com/runefix-labs/runefix-core"
+documentation = "https://docs.rs/runefix-core"
+homepage = "https://github.com/runefix-labs/runefix-core"
+
+# Control what gets published to crates.io
+include = [
+    "src/**",
+    "Cargo.toml",
+    "Cargo.lock",
+    "README.md",
+    "README_zh.md",
+    "README_ja.md",
+    "LICENSE*",
+    "examples/*.rs"
+]
+
+[dependencies]
+once_cell = "1.21"
+serde_json = "1.0"
+unicode-segmentation = "1.12"
