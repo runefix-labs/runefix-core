@@ -34,7 +34,10 @@ pub fn display_widths_with_policy(s: &str, policy: Option<&WidthPolicy>) -> Vec<
 }
 
 /// Same as [`grapheme_widths`](crate::grapheme_widths), but applies the given [`WidthPolicy`] strategy.
-pub fn grapheme_widths_with_policy(s: &str, policy: Option<&WidthPolicy>) -> Vec<(&str, usize)> {
+pub fn grapheme_widths_with_policy<'a>(
+    s: &'a str,
+    policy: Option<&WidthPolicy>
+) -> Vec<(&'a str, usize)> {
     split_graphemes(s)
         .iter()
         .map(|g| (*g, get_display_width_with_policy(g, policy)))
@@ -42,11 +45,11 @@ pub fn grapheme_widths_with_policy(s: &str, policy: Option<&WidthPolicy>) -> Vec
 }
 
 /// Same as [`truncate_by_width`](crate::truncate_by_width), but applies the given [`WidthPolicy`] strategy.
-pub fn truncate_by_width_with_policy(
-    s: &str,
+pub fn truncate_by_width_with_policy<'a>(
+    s: &'a str,
     max_width: usize,
     policy: Option<&WidthPolicy>
-) -> &str {
+) -> &'a str {
     let mut total_width = 0;
     let mut end_byte = 0;
 

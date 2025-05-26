@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.4] - 2025-05-26
+
+### Fixed
+- Fixed missing lifetime annotations in `grapheme_widths_with_policy` and `truncate_by_width_with_policy`.
+- Previous version `0.1.3` failed to compile under `--features policy`.
+
+
 ## [0.1.3] - 2025-05-26
 
 ### Added
