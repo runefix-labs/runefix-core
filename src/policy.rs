@@ -81,6 +81,16 @@ impl WidthPolicy {
         }
     }
 
+    /// Returns a tuple that uniquely identifies this policy's behavior.
+    ///
+    /// This is used for internal comparison only, such as determining
+    /// whether a policy matches one of the built-in presets.
+    ///
+    /// ⚠️ Not intended for semantic equality.
+    pub fn as_tuple(&self) -> (usize, usize, usize, usize) {
+        (self.emoji, self.cjk, self.variant, self.fallback)
+    }
+    
     /// (Optional extension) Override width for a specific character.
     ///
     /// Currently, a placeholder for future per-character adjustments.

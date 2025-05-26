@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.8] - 2025-05-27
+
+### Added
+- Added `WidthPolicy::as_tuple()` helper for internal comparison in CLI and external consumers.
+  - Enables downstream tools to identify if a policy matches built-in presets (e.g. `terminal`, `markdown`, `compact`).
+- Documented intended use of `.as_tuple()` as non-semantic structural matcher.
+
+
 ## [0.1.7] - 2025-05-27
 
 ### Changed
