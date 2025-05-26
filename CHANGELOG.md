@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.7] - 2025-05-27
+
+### Changed
+- Changed `UNICODE_VERSION` from `&str` to `(u8, u8, u8)` format for more structured semver logic.
+- Improved Python script `integrate_char_table.py` to reflect tuple output and auto-update safely.
+- Renamed test files for consistency:
+  - `grapheme_test.rs` → `grapheme.rs`
+  - `width_test.rs` → `width.rs`
+  - `with_policy_test.rs` → `with_policy.rs`
+
+
 ## [0.1.6] - 2025-05-27
 
 ### Added

@@ -119,11 +119,11 @@ class CharTableIntegrator:
         replaced = False
 
         for i in range(len(lines)):
-            if "pub const UNICODE_VERSION: &str" in lines[i]:
+            if "pub const UNICODE_VERSION: (u8, u8, u8)" in lines[i]:
                 new_lines[-2:] = [  # Replace previous comment and const
                     f'/// Unicode Version used by this build (auto-synced).',
                     f'/// auto-updated: {today}',
-                    f'pub const UNICODE_VERSION: &str = "{self.version}";'
+                    f'pub const UNICODE_VERSION: (u8, u8, u8) = ({", ".join(self.version.split("."))});'
                 ]
                 replaced = True
             else:
@@ -134,7 +134,7 @@ class CharTableIntegrator:
             new_lines.append("")
             new_lines.append(f'/// Unicode Version used by this build (auto-synced).')
             new_lines.append(f'/// auto-updated: {today}')
-            new_lines.append(f'pub const UNICODE_VERSION: &str = "{self.version}";')
+            new_lines.append(f'pub const UNICODE_VERSION: (u8, u8, u8) = ({", ".join(self.version.split("."))});')
 
         CONST_RS_PATH.write_text("\n".join(new_lines) + "\n")
 
