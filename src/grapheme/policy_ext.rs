@@ -20,7 +20,6 @@ use crate::{policy::WidthPolicy, width::get_display_width_with_policy};
 /// Same as [`display_width`](crate::display_width), but applies the given [`WidthPolicy`] strategy.
 pub fn display_width_with_policy(s: &str, policy: Option<&WidthPolicy>) -> usize {
     UnicodeSegmentation::graphemes(s, true)
-        .iter()
         .map(|g| get_display_width_with_policy(g, policy))
         .sum()
 }
@@ -28,7 +27,6 @@ pub fn display_width_with_policy(s: &str, policy: Option<&WidthPolicy>) -> usize
 /// Same as [`display_widths`](crate::display_widths), but applies the given [`WidthPolicy`] strategy.
 pub fn display_widths_with_policy(s: &str, policy: Option<&WidthPolicy>) -> Vec<usize> {
     UnicodeSegmentation::graphemes(s, true)
-        .iter()
         .map(|g| get_display_width_with_policy(g, policy))
         .collect()
 }
@@ -39,7 +37,6 @@ pub fn grapheme_widths_with_policy<'a>(
     policy: Option<&WidthPolicy>
 ) -> Vec<(&'a str, usize)> {
     UnicodeSegmentation::graphemes(s, true)
-        .iter()
         .map(|g| (*g, get_display_width_with_policy(g, policy)))
         .collect()
 }
