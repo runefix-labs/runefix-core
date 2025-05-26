@@ -18,7 +18,7 @@ pub fn print_naive_centered_box(content: &str) {
 
 /// Fixed version using `runefix_core` for proper Unicode width support.
 ///
-/// Uses `.rune_width()` to handle fullwidth CJK and emoji correctly.
+/// Uses `.width()` to handle fullwidth CJK and emoji correctly.
 pub fn print_fixed_centered_box(content: &str) {
     use runefix_core::RuneDisplayWidth;
 
