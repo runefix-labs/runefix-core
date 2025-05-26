@@ -1,23 +1,51 @@
+#![cfg(feature = "policy")]
+
+//! Strategy system for configurable display width behavior.
+//!
+//! This module defines [`WidthPolicy`], a runtime struct that allows customizing
+//! the width treatment of graphemes by category:
+//!
+//! - Emoji (e.g. 😄, 🧑‍🤝‍🧑)
+//! - CJK ideographs (e.g. 汉字), Kana, Hangul
+//! - Fullwidth symbols and punctuation (e.g. Ａ, 、)
+//! - Fallback for unknown graphemes
+//!
+//! ## Built-in Policies
+//!
+//! - [`WidthPolicy::terminal()`] — terminal-style (emoji = 2, CJK = 2)
+//! - [`WidthPolicy::markdown()`] — Markdown-style (emoji = 1, CJK = 2)
+//! - [`WidthPolicy::compact()`] — minimal width (everything = 1)
+//!
+//! ## Usage
+//!
+//! Used with policy-aware functions such as:
+//!
+//! - [`display_width_with_policy`](crate::grapheme::policy_ext::display_width_with_policy)
+//! - [`WithPolicy`](crate::with_policy::WithPolicy) for fluent API
+//!
+//! > **Note:** This module is only available when the `policy` feature is enabled.
+
 /// Defines per-category width behavior for grapheme display.
 ///
 /// This struct allows customizing how wide each category of character
 /// (emoji, CJK, fullwidth symbols) is treated at runtime.
 ///
 /// Requires enabling the `policy` feature.
-#[cfg(feature = "policy")]
 #[derive(Debug, Clone)]
 pub struct WidthPolicy {
     /// Width for emoji graphemes (e.g., 😄, 🧑‍🤝‍🧑)
     pub emoji: usize,
+
     /// Width for CJK ideographs (e.g., 漢字), kana, and hangul
     pub cjk: usize,
+
     /// Width for fullwidth symbol variants and East Asian punctuations (e.g., Ａ, 、)
     pub variant: usize,
+
     /// Fallback width for unknown or uncategorized graphemes
     pub fallback: usize,
 }
 
-#[cfg(feature = "policy")]
 impl WidthPolicy {
     /// Standard terminal policy (emoji = 2, CJK = 2, variant = 2, fallback = 1).
     ///

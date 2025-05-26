@@ -6,6 +6,15 @@
 use runefix_core::*;
 
 #[test]
+fn test_grapheme_atoms() {
+    // Splits the string into grapheme clusters
+    assert_eq!(
+        grapheme_atoms("你a1👇"),
+        vec!["你", "a", "1", "👇"]
+    );
+}
+
+#[test]
 fn test_display_widths_per_char() {
     // "补塔🔪，不行，怪我咯" ———— 来自 LOL 辅助的无声控诉
     assert_eq!(display_widths("你a1👇"), [2, 1, 1, 2]);
@@ -15,15 +24,6 @@ fn test_display_widths_per_char() {
 fn test_display_width_total_sum() {
     // "你a1👇"：终端宽度 6，心态宽度 0
     assert_eq!(display_width("你a1👇"), 6);
-}
-
-#[test]
-fn test_split_graphemes() {
-    // Splits the string into grapheme clusters
-    assert_eq!(
-        split_graphemes("你a1👇"),
-        vec!["你", "a", "1", "👇"]
-    );
 }
 
 #[test]

@@ -49,10 +49,12 @@ runefix-core = { version = "0.1", features = ["policy"] }
 ```
 Rustコードでは以下のように使えます：
 ```rust
-use runefix_core::{WidthPolicy, display_width_with_policy};
+use runefix_core::{WidthPolicy, WithPolicy};
 
-let w = display_width_with_policy("😂", Some(&WidthPolicy::markdown()));
-assert_eq!(w, 1);  // Markdownではemojiの幅は1が望ましい
+let policy = WidthPolicy::markdown();
+let width = WithPolicy::new(&policy).apply("😂").display_width();
+
+assert_eq!(width, 1); // Markdown環境では絵文字の幅は1になります
 ```
 
 ## 🧠 組み込みポリシー一覧

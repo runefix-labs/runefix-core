@@ -15,12 +15,22 @@
 //!
 //! ## Features
 //!
-//! - [`get_display_width`] – Width of a single grapheme
-//! - [`display_widths`] – Widths of multiple graphemes (Vec<(str, usize)>)
-//! - [`split_graphemes`] – Unicode-aware segmentation
-//! - [`truncate_by_width`] – Safe truncation without splitting CJK/emoji
-//! - [`split_by_width`] – Line wrapping by terminal width
-//! - [`RuneDisplayWidth`] – Trait for `.rune_width()` extension
+//! 🧩 **Segmentation API**
+//! - [`grapheme_atoms`] – Unicode-aware grapheme cluster splitting
+//!
+//! 📏 **Measurement API**
+//! - [`display_width`] – Total width of a string (grapheme-aware, terminal-style)
+//! - [`display_widths`] – Widths of each grapheme cluster (`Vec<usize>`)
+//! - [`grapheme_widths`] – Widths with original clusters (`Vec<(&str, usize)>`)
+//!
+//! 📐 **Layout API**
+//! - [`truncate_by_width`] – Truncates text by width without splitting graphemes
+//! - [`split_by_width`] – Wraps a string into lines based on terminal width
+//!
+//! 🍭 **Ergonomic Extensions**
+//! - [`RuneDisplayWidth`] – Trait for:
+//!     - `.rune_width()` on `char`
+//!     - `.width()`, `.display_width()`, `.display_widths()` on `str`
 //!
 //! ## Example
 //!
@@ -43,38 +53,54 @@
 //! > **Note:** Enable the `policy` feature to use configurable width strategies
 //! > such as `terminal()`, `markdown()`, or `compact()`.
 
-/// Public API: Core utilities for grapheme width and segmentation.
+
+// ───── Public APIs ─────────────────────────────────────────────
+
+// Grapheme-based core processing functions (always available)
 pub use grapheme::{
+    grapheme_atoms,
     display_width,
     display_widths,
     grapheme_widths,
-    split_graphemes,
     truncate_by_width,
     split_by_width
 };
 
-/// Public API: Trait extension for `.rune_width()`.
+// Unicode-aware trait extensions for `char` and `str`
 pub use ext::RuneDisplayWidth;
 
-/// Public API: Unicode database version used by this build.
+// Unicode data version used internally
 pub use consts::UNICODE_VERSION;
 
-/// Feature-gated: Width policy system for dynamic customization.
+// ───── Optional: Feature-gated APIs (requires `policy`) ─────────
+
+// Configurable width strategy struct
 #[cfg(feature = "policy")]
 pub use policy::WidthPolicy;
 
+// Ergonomic wrapper for applying a WidthPolicy to strings
 #[cfg(feature = "policy")]
-pub use width::display_width_with_policy;
+pub use with_policy::WithPolicy;
 
-// ─────────────────────────────────────────────────────────────
-// Internal modules (not directly re-exported)
-// ─────────────────────────────────────────────────────────────
+// Policy-aware versions of grapheme layout functions
+#[cfg(feature = "policy")]
+pub use crate::grapheme::policy_ext::{
+    display_width_with_policy,
+    display_widths_with_policy,
+    grapheme_widths_with_policy,
+    truncate_by_width_with_policy,
+    split_by_width_with_policy
+};
+
+// ───── Internal Modules (implementation details) ───────────────
 
 mod consts;
 mod rules;
-mod width;
 mod grapheme;
+mod width;
 mod ext;
 
 #[cfg(feature = "policy")]
-pub mod policy;
+mod policy;
+#[cfg(feature = "policy")]
+mod with_policy;

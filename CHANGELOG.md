@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.3] - 2025-05-26
+
+### Added
+- Introduced `with_policy.rs`: enables ergonomic chained usage like `.apply("text").display_width()` for applying width policies
+- Added `policy_ext.rs`: a set of policy-aware API variants (e.g. `display_width_with_policy`, `split_by_width_with_policy`, etc.)
+
+### Changed
+- Refactored `grapheme.rs` into a directory module (`mod.rs`, `basic.rs`, `policy_ext.rs`) for better modularity and future extensibility
+- No changes to core logic; only internal structure and annotations reorganized
+- Improved documentation coverage with complete Rustdoc examples and semantic comments on all public APIs
+
+
 ## [0.1.2] - 2025-05-26
 ### Added
 - Introduced optional `--features policy` runtime engine 

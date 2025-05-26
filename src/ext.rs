@@ -1,3 +1,15 @@
+//! Extension trait for ergonomic width measurement.
+//!
+//! This module defines [`RuneDisplayWidth`], a trait implemented for both `char` and `str`,
+//! providing convenient methods like `.width()`, `.rune_width()`, and `.display_widths()`.
+//!
+//! These methods offer a unified interface for querying terminal display width,
+//! automatically applying grapheme segmentation where appropriate.
+//!
+//! See also:
+//! - [`display_width`](crate::grapheme::display_width)
+//! - [`WidthPolicy`](crate::policy::WidthPolicy) for configurable strategies
+
 /// Extension trait for measuring the display width of runes, graphemes, and strings.
 ///
 /// This trait provides unified access to terminal display width calculations
@@ -26,16 +38,16 @@ pub trait RuneDisplayWidth {
     /// For `&str`, this assumes the string is a single grapheme cluster.
     fn rune_width(&self) -> usize;
 
+    /// Returns the total display width in terminal columns.
+    ///
+    /// Equivalent to summing the result of `display_widths()`.
+    fn display_width(&self) -> usize;
+
     /// Returns the display width of each grapheme cluster in the value.
     ///
     /// For `&str`, this segments the string using Unicode grapheme rules.
     /// For `char`, returns a single-item vector.
     fn display_widths(&self) -> Vec<usize>;
-
-    /// Returns the total display width in terminal columns.
-    ///
-    /// Equivalent to summing the result of `display_widths()`.
-    fn display_width(&self) -> usize;
 
     /// Returns the total display width in terminal columns
     /// (alias of `display_width()`).
@@ -49,12 +61,12 @@ impl RuneDisplayWidth for str {
         crate::width::get_display_width(self)
     }
 
-    fn display_widths(&self) -> Vec<usize> {
-        crate::grapheme::display_widths(self)
-    }
-
     fn display_width(&self) -> usize {
         crate::grapheme::display_width(self)
+    }
+
+    fn display_widths(&self) -> Vec<usize> {
+        crate::grapheme::display_widths(self)
     }
 }
 
@@ -63,11 +75,11 @@ impl RuneDisplayWidth for char {
         crate::width::get_display_width(&self.to_string())
     }
 
-    fn display_widths(&self) -> Vec<usize> {
-        vec![self.rune_width()]
-    }
-
     fn display_width(&self) -> usize {
         self.rune_width()
+    }
+
+    fn display_widths(&self) -> Vec<usize> {
+        vec![self.rune_width()]
     }
 }

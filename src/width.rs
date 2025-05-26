@@ -1,3 +1,19 @@
+//! Core width resolution logic for grapheme clusters.
+//!
+//! This module defines low-level width computation used by all public APIs.
+//!
+//! It supports:
+//! - Terminal-style default width (`get_display_width`)
+//! - Customizable policy-based width (`get_display_width_with_policy`)
+//!
+//! Widths are resolved to 0, 1, or 2 columns, depending on:
+//! - Control characters
+//! - ASCII
+//! - CJK, Hangul, Kana, fullwidth symbols
+//! - Emoji (including ZWJ)
+//!
+//! Feature `policy` enables runtime policy customization.
+
 use crate::rules::cjk::is_cjk;
 use crate::rules::kana::is_kana;
 use crate::rules::emoji::is_emoji;
@@ -6,6 +22,10 @@ use crate::rules::punct::is_fullwidth_punct;
 use crate::rules::variants::is_fullwidth_variant;
 #[cfg(feature = "policy")]
 use crate::policy::WidthPolicy;
+
+//
+// ─── Public API Entrypoints ─────────────────────────────────────────
+//
 
 /// Returns the display width of a grapheme cluster for terminal environments.
 ///
@@ -52,13 +72,16 @@ use crate::policy::WidthPolicy;
 ///
 /// # Note
 ///
-/// If the `policy` feature is enabled, prefer using [`display_width_with_policy()`]  
+/// If the `policy` feature is enabled, prefer using [`get_display_width_with_policy()`]  
 /// instead of [`get_display_width()`] to apply environment-specific width rules.
 #[cfg(not(feature = "policy"))]
 pub(crate) fn get_display_width(s: &str) -> usize {
     DefaultPolicy.resolve_width(s)
 }
 
+/// Returns the display width of a grapheme cluster using [`WidthPolicy::terminal()`].
+///
+/// Requires `policy` feature.
 #[cfg(feature = "policy")]
 pub(crate) fn get_display_width(s: &str) -> usize {
     WidthPolicy::terminal().resolve_width(s)
@@ -75,20 +98,26 @@ pub(crate) fn get_display_width(s: &str) -> usize {
 /// # Use Case
 /// Supports runtime customization of width behavior,
 /// enabling environment-specific layout strategies (e.g. markdown, TUI, logs).
-/// 
+///
 /// # Returns
 /// - width = `0`, `1`, or `2`
 ///
 /// # Strategy
 /// - Each rule uses `policy.cjk`, `policy.emoji`, `policy.variant`, etc.
-///
 #[cfg(feature = "policy")]
-pub fn display_width_with_policy(s: &str, policy: Option<&WidthPolicy>) -> usize {
+pub fn get_display_width_with_policy(s: &str, policy: Option<&WidthPolicy>) -> usize {
     policy.unwrap_or(&WidthPolicy::terminal()).resolve_width(s)
 }
 
+//
+// ─── Width Resolution for Policy (Feature = "policy") ──────────────
+//
+
 #[cfg(feature = "policy")]
 impl WidthPolicy {
+    /// Resolves the width of a grapheme using this policy.
+    ///
+    /// Applies per-category width rules for emoji, CJK, variants, etc.
     pub fn resolve_width(&self, s: &str) -> usize {
         let mut chars = s.chars();
 
@@ -110,6 +139,10 @@ impl WidthPolicy {
             }
         }
 
+        // Emoji lookup is deferred to the end for two reasons:
+        // - It supports multi-codepoint graphemes (e.g. "👩‍❤️‍💋‍👨"), which cannot be matched earlier.
+        // - The emoji dataset is broad and may include symbols like "©" or "™",
+        //   which are normally rendered with width 1 unless followed by variation selectors.
         if is_emoji(s) {
             return self.emoji;
         }
@@ -118,14 +151,17 @@ impl WidthPolicy {
     }
 }
 
-/// Default fallback policy used internally when the `policy` feature is disabled.
-/// This struct is not exposed publicly and is not intended for customization.
+//
+// ─── Internal Fallback (No Policy) ─────────────────────────────────
+//
+
+/// Internal default width resolver used when `policy` is disabled.
 #[cfg(not(feature = "policy"))]
 struct DefaultPolicy;
 
 #[cfg(not(feature = "policy"))]
 impl DefaultPolicy {
-    /// Internal width resolution logic for DefaultPolicy.
+    /// Resolves width using terminal-style fallback logic.
     fn resolve_width(&self, s: &str) -> usize {
         let mut chars = s.chars();
 
@@ -147,10 +183,7 @@ impl DefaultPolicy {
             }
         }
 
-        // Emoji lookup is deferred to the end for two reasons:
-        // - It supports multi-codepoint graphemes (e.g. "👩‍❤️‍💋‍👨"), which cannot be matched earlier.
-        // - The emoji dataset is broad and may include symbols like "©" or "™",
-        //   which are normally rendered with width 1 unless followed by variation selectors.
+        // Defer emoji lookup to avoid misclassifying short graphemes
         if is_emoji(s) {
             return 2;
         }
