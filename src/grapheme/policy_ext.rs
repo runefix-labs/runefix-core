@@ -37,7 +37,7 @@ pub fn grapheme_widths_with_policy<'a>(
     policy: Option<&WidthPolicy>
 ) -> Vec<(&'a str, usize)> {
     UnicodeSegmentation::graphemes(s, true)
-        .map(|g| (*g, get_display_width_with_policy(g, policy)))
+        .map(|g| (g, get_display_width_with_policy(g, policy)))
         .collect()
 }
 
