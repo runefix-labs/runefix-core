@@ -11,9 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
-      - name: Run tests
+
+      - name: Test (default features)
         run: cargo test --all
+
+      - name: Test (with policy feature)
+        run: cargo test --all --features policy
+
+      - name: Doctest (with policy feature)
+        run: cargo test --doc --features policy

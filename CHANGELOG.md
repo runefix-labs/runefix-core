@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.5] - 2025-05-26
+
+### Added
+- Added `with_policy_test.rs` for testing WithPolicy chaining API. 
+- Added CI coverage for `--features policy` and doctests.
+
+### Changed
+- Updated CI workflow: now includes both regular tests and `--features policy` + doctest checks. 
+- Refactored `AppliedPolicy` visibility and doctest to ensure safe lifetime usage.
+
+### Fixed
+- Fixed doctest failure caused by temporary value borrow in `with_policy` example. 
+- Silenced warnings related to unused imports and dead code in feature-gated modules.
+
+
 ## [0.1.4] - 2025-05-26
 
 ### Fixed

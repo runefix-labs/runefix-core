@@ -10,8 +10,9 @@
 //! let policy = WidthPolicy::markdown();
 //! let text = "Hello 👋 世界";
 //!
-//! let wrapped = WithPolicy::new(&policy).apply(text);
-//! assert_eq!(wrapped.display_width(), 10);
+//! let binding = WithPolicy::new(&policy);
+//! let wrapped = binding.apply(text);
+//! assert_eq!(wrapped.display_width(), 12);
 //! ```
 //!
 //! Requires the `policy` feature.
@@ -37,7 +38,7 @@ impl<'a> WithPolicy<'a> {
 }
 
 /// A width-aware view of a string with an attached [`WidthPolicy`].
-struct AppliedPolicy<'a, 's> {
+pub struct AppliedPolicy<'a, 's> {
     s: &'s str,
     policy: &'a crate::policy::WidthPolicy,
 }
