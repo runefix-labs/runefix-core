@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.6] - 2025-05-27
+
+### Added
+- Implemented `Display`, `Debug`, `AsRef<str>`, `Deref<Target=str>`, `PartialEq<str>`, and `PartialEq<&str>` for `AppliedPolicy`.
+- Added `tests/with_policy_test.rs` with full coverage for `WithPolicy::apply` and related methods.
+- Introduced top-level `Makefile` for local development, supporting:
+  - `make test`, `make lint`, `make fmt`, `make check` (full CI parity).
+- CI now includes:
+  - `cargo clippy --all-targets --all-features -- -D warnings`
+  - `cargo fmt --check` for formatting enforcement.
+
+### Changed
+- Restructured `with_policy.rs` internal API for better clarity and trait coherence.
+- Improved doc comments and doctest examples to reflect real-world usage patterns.
+- Updated README:
+  - Added `.apply(...)` chaining note on `&str` borrow behavior.
+  - Clarified `WithPolicy` idioms with intermediate bindings when necessary.
+
+### Fixed
+- Removed duplicated `#![cfg(feature = "policy")]` declarations from submodules.
+- Resolved Clippy lifetime warnings (`needless_lifetimes`) via `'_` elision.
+- Fixed formatting violations in `examples/text_align.rs`.
+- Ensured `make lint` and CI pass with zero warnings or diff.
+
+
 ## [0.1.5] - 2025-05-26
 
 ### Added

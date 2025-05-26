@@ -53,17 +53,12 @@
 //! > **Note:** Enable the `policy` feature to use configurable width strategies
 //! > such as `terminal()`, `markdown()`, or `compact()`.
 
-
 // ───── Public APIs ─────────────────────────────────────────────
 
 // Grapheme-based core processing functions (always available)
 pub use grapheme::{
-    grapheme_atoms,
-    display_width,
-    display_widths,
-    grapheme_widths,
+    display_width, display_widths, grapheme_atoms, grapheme_widths, split_by_width,
     truncate_by_width,
-    split_by_width
 };
 
 // Unicode-aware trait extensions for `char` and `str`
@@ -85,20 +80,17 @@ pub use with_policy::WithPolicy;
 // Policy-aware versions of grapheme layout functions
 #[cfg(feature = "policy")]
 pub use crate::grapheme::policy_ext::{
-    display_width_with_policy,
-    display_widths_with_policy,
-    grapheme_widths_with_policy,
-    truncate_by_width_with_policy,
-    split_by_width_with_policy
+    display_width_with_policy, display_widths_with_policy, grapheme_widths_with_policy,
+    split_by_width_with_policy, truncate_by_width_with_policy,
 };
 
 // ───── Internal Modules (implementation details) ───────────────
 
 mod consts;
-mod rules;
-mod grapheme;
-mod width;
 mod ext;
+mod grapheme;
+mod rules;
+mod width;
 
 #[cfg(feature = "policy")]
 mod policy;

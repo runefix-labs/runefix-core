@@ -56,6 +56,7 @@ let width = WithPolicy::new(&policy).apply("😂").display_width();
 
 assert_eq!(width, 1); // Markdown環境では絵文字の幅は1になります
 ```
+ℹ️ 補足：`.truncate_by_width(...)` など一部の高機能メソッドでは、Rust の `&str` 借用ルールにより、一時変数の導入が必要になる場合があります。使用例については [`with_policy.rs`](./src/with_policy.rs) をご覧ください。
 
 ## 🧠 組み込みポリシー一覧
 

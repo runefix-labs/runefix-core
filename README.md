@@ -56,6 +56,7 @@ let width = WithPolicy::new(&policy).apply("😂").display_width();
 
 assert_eq!(width, 1); // markdown prefers emoji width = 1
 ```
+ℹ️ _Note: Some advanced methods (like `.truncate_by_width(...)`) may require intermediate bindings due to borrowing rules of `&str`. See [`with_policy.rs`](./src/with_policy.rs) for idiomatic usage._
 
 ## 🧠 Built-in Policies
 

@@ -14,14 +14,14 @@
 //!
 //! Feature `policy` enables runtime policy customization.
 
-use crate::rules::cjk::is_cjk;
-use crate::rules::kana::is_kana;
-use crate::rules::emoji::is_emoji;
-use crate::rules::hangul::is_hangul;
-use crate::rules::punct::is_fullwidth_punct;
-use crate::rules::variants::is_fullwidth_variant;
 #[cfg(feature = "policy")]
 use crate::policy::WidthPolicy;
+use crate::rules::cjk::is_cjk;
+use crate::rules::emoji::is_emoji;
+use crate::rules::hangul::is_hangul;
+use crate::rules::kana::is_kana;
+use crate::rules::punct::is_fullwidth_punct;
+use crate::rules::variants::is_fullwidth_variant;
 
 //
 // ─── Public API Entrypoints ─────────────────────────────────────────

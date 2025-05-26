@@ -8,10 +8,7 @@ use runefix_core::*;
 #[test]
 fn test_grapheme_atoms() {
     // Splits the string into grapheme clusters
-    assert_eq!(
-        grapheme_atoms("你a1👇"),
-        vec!["你", "a", "1", "👇"]
-    );
+    assert_eq!(grapheme_atoms("你a1👇"), vec!["你", "a", "1", "👇"]);
 }
 
 #[test]
@@ -38,9 +35,9 @@ fn test_grapheme_widths() {
 #[test]
 fn test_truncate_by_width() {
     // Truncates the string to a target display width (in columns)
-    assert_eq!(truncate_by_width("你a1👇", 2), "你");     // width = 2
-    assert_eq!(truncate_by_width("你a1👇", 3), "你a");    // width = 3
-    assert_eq!(truncate_by_width("你a1👇", 4), "你a1");   // width = 4
+    assert_eq!(truncate_by_width("你a1👇", 2), "你"); // width = 2
+    assert_eq!(truncate_by_width("你a1👇", 3), "你a"); // width = 3
+    assert_eq!(truncate_by_width("你a1👇", 4), "你a1"); // width = 4
     assert_eq!(truncate_by_width("你a1👇", 6), "你a1👇"); // no truncation needed
 }
 

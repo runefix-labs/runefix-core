@@ -11,8 +11,8 @@
 //!
 //! See [`policy_ext`](crate::grapheme::policy_ext) for configurable width behavior.
 
-use unicode_segmentation::UnicodeSegmentation;
 use crate::width::get_display_width;
+use unicode_segmentation::UnicodeSegmentation;
 
 /// Returns all grapheme clusters ("atoms") in the input string as a vector of string slices.
 ///
@@ -69,7 +69,9 @@ pub fn grapheme_atoms(s: &str) -> Vec<&str> {
 /// assert_eq!(width, 8); // 1 + 1 + 2 + 2 + 2
 /// ```
 pub fn display_width(s: &str) -> usize {
-    UnicodeSegmentation::graphemes(s, true).map(get_display_width).sum()
+    UnicodeSegmentation::graphemes(s, true)
+        .map(get_display_width)
+        .sum()
 }
 
 /// Returns the display width (in columns) of each grapheme cluster in the input string.
@@ -96,7 +98,9 @@ pub fn display_width(s: &str) -> usize {
 /// assert_eq!(widths, vec![1, 1, 2, 2, 2]);
 /// ```
 pub fn display_widths(s: &str) -> Vec<usize> {
-    UnicodeSegmentation::graphemes(s, true).map(get_display_width).collect()
+    UnicodeSegmentation::graphemes(s, true)
+        .map(get_display_width)
+        .collect()
 }
 
 /// Returns the display width of each grapheme cluster in the input string.

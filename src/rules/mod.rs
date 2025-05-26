@@ -1,6 +1,6 @@
-pub mod emoji;
 pub mod cjk;
-pub mod kana;
+pub mod emoji;
 pub mod hangul;
-pub mod variants;
+pub mod kana;
 pub mod punct;
+pub mod variants;

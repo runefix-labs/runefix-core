@@ -1,6 +1,6 @@
-use std::collections::HashSet;
 use once_cell::sync::Lazy;
 use serde_json::Value;
+use std::collections::HashSet;
 
 /// Static set of fullwidth punctuation marks (e.g., `，`, `。`, `！`, `？`, `【】`, `《》`).
 ///

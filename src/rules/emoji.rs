@@ -1,6 +1,6 @@
-use std::collections::HashSet;
 use once_cell::sync::Lazy;
 use serde_json::Value;
+use std::collections::HashSet;
 
 /// A static set of fully-qualified emoji strings used for display width detection.
 ///

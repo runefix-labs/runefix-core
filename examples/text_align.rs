@@ -19,6 +19,7 @@ pub fn print_naive_centered_box(content: &str) {
 /// Fixed version using `runefix_core` for proper Unicode width support.
 ///
 /// Uses `.width()` to handle fullwidth CJK and emoji correctly.
+#[rustfmt::skip]
 pub fn print_fixed_centered_box(content: &str) {
     use runefix_core::RuneDisplayWidth;
 
@@ -37,6 +38,7 @@ pub fn print_fixed_centered_box(content: &str) {
     println!("┗{}┛", "━".repeat(content_width));
 }
 
+#[rustfmt::skip]
 fn main() {
     // ASCII only – looks the same
     print_naive_centered_box("[NAIVE] Lorem ipsum dolor sit amet consectetur adipisicing elit.");

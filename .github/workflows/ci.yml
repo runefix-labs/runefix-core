@@ -10,18 +10,31 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      # 🚚 Clone repo
       - uses: actions/checkout@v3
 
+      # 🔧 Set up Rust toolchain
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
 
+      # ✅ Run tests (no feature)
       - name: Test (default features)
         run: cargo test --all
 
+      # ✅ Run tests with `policy` feature enabled
       - name: Test (with policy feature)
         run: cargo test --all --features policy
 
+      # 📚 Run doctests with `policy` feature
       - name: Doctest (with policy feature)
         run: cargo test --doc --features policy
+
+      # 🧹 Lint with Clippy (fail on warnings)
+      - name: Lint (clippy)
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      # 🎨 Check formatting (fail if not rustfmt'ed)
+      - name: Check format
+        run: cargo fmt --all -- --check

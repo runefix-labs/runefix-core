@@ -55,6 +55,7 @@ let width = WithPolicy::new(&policy).apply("😂").display_width();
 
 assert_eq!(width, 1); // 在 Markdown 中 emoji 宽度为 1
 ```
+ℹ️ 注意：某些高级用法（例如 `.truncate_by_width(...)`）由于 `&str` 的借用规则，可能需要使用中间变量。参见 [`with_policy.rs`](./src/with_policy.rs) 获取惯用示例。
 
 ## 🧠 内置策略一览
 

@@ -1,5 +1,3 @@
-#![cfg(feature = "policy")]
-
 //! Strategy system for configurable display width behavior.
 //!
 //! This module defines [`WidthPolicy`], a runtime struct that allows customizing
