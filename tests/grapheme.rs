@@ -6,9 +6,9 @@
 use runefix_core::*;
 
 #[test]
-fn test_grapheme_atoms() {
+fn test_graphemes() {
     // Splits the string into grapheme clusters
-    assert_eq!(grapheme_atoms("你a1👇"), vec!["你", "a", "1", "👇"]);
+    assert_eq!(graphemes("你a1👇"), vec!["你", "a", "1", "👇"]);
 }
 
 #[test]

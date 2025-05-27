@@ -22,7 +22,7 @@ use std::fmt::{self, Debug, Display, Formatter};
 use std::ops::Deref;
 
 // crate
-use crate::grapheme::grapheme_atoms;
+use crate::grapheme::graphemes;
 use crate::grapheme::policy_ext::{
     display_width_with_policy, display_widths_with_policy, grapheme_widths_with_policy,
     split_by_width_with_policy, truncate_by_width_with_policy,
@@ -60,8 +60,8 @@ pub struct AppliedPolicy<'a, 's> {
 
 impl AppliedPolicy<'_, '_> {
     /// Returns the Unicode grapheme clusters of the string.
-    pub fn grapheme_atoms(&self) -> Vec<&str> {
-        grapheme_atoms(self.s)
+    pub fn graphemes(&self) -> Vec<&str> {
+        graphemes(self.s)
     }
 
     /// Returns the total display width under the current policy.

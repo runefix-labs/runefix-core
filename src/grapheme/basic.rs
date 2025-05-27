@@ -14,34 +14,35 @@
 use crate::width::get_display_width;
 use unicode_segmentation::UnicodeSegmentation;
 
-/// Returns all grapheme clusters ("atoms") in the input string as a vector of string slices.
+/// Returns all Unicode grapheme clusters in the input string, following UAX #29.
 ///
-/// A **grapheme atom** is the smallest unit of text perceived by users — which may consist
-/// of one or more Unicode codepoints. This function respects complex characters like:
+/// A **grapheme cluster** is the smallest unit of text that a user perceives as a single character.
+/// This function implements [Unicode® Standard Annex #29](https://unicode.org/reports/tr29/),
+/// including support for extended grapheme clusters such as:
 ///
-/// - Emoji ZWJ sequences (e.g., "👩‍❤️‍💋‍👨")
-/// - Composed Hangul syllables
-/// - Accented characters (e.g., "é")
+/// - Emoji ZWJ sequences (e.g., 👩‍❤️‍💋‍👨)
+/// - Hangul syllables
+/// - Combining accents (e.g., é)
 ///
-/// Internally uses Unicode segmentation to ensure accurate human-perceived boundaries.
+/// This API is Unicode-compliant and suitable for user-facing string segmentation.
 ///
 /// # Arguments
 ///
-/// * `s` - The input string to split
+/// * `s` – The input string to split.
 ///
 /// # Returns
 ///
-/// A `Vec<&str>` where each item is a grapheme cluster (user-perceived character).
+/// A `Vec<&str>` where each item is a Unicode grapheme cluster.
 ///
 /// # Example
 ///
 /// ```rust
-/// use runefix_core::grapheme_atoms;
+/// use runefix_core::graphemes;
 ///
-/// let clusters = grapheme_atoms("Love👩‍❤️‍💋‍👨爱");
+/// let clusters = graphemes("Love👩‍❤️‍💋‍👨爱");
 /// assert_eq!(clusters, vec!["L", "o", "v", "e", "👩‍❤️‍💋‍👨", "爱"]);
 /// ```
-pub fn grapheme_atoms(s: &str) -> Vec<&str> {
+pub fn graphemes(s: &str) -> Vec<&str> {
     UnicodeSegmentation::graphemes(s, true).collect()
 }
 

@@ -24,4 +24,4 @@ fmt:
 	cargo fmt --all -- --check
 
 # One command to run full CI logic locally
-check: test test-policy test-doc lint fmt
+check: lint fmt test test-policy test-doc

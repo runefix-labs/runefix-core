@@ -90,7 +90,7 @@ impl WidthPolicy {
     pub fn as_tuple(&self) -> (usize, usize, usize, usize) {
         (self.emoji, self.cjk, self.variant, self.fallback)
     }
-    
+
     /// (Optional extension) Override width for a specific character.
     ///
     /// Currently, a placeholder for future per-character adjustments.

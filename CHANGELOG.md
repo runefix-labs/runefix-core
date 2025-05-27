@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.9] - 2025-05-27
+
+### Added
+- Introduced `atoms()` API: runefix-specific layout segmentation based on display width.
+- Added new module `atom.rs` and exported `atoms()` from crate root.
+- Added tests covering ZWJ emoji, variation selectors, and visual unit splits.
+- Added doc-tests and inline documentation for `atoms()` including real-world examples.
+
+### Changed
+- Updated `test/grapheme.rs` to replace legacy `grapheme_atoms()` usage with `graphemes()`.
+- Improved module-level docs to distinguish Unicode graphemes vs layout atoms.
+- Enhanced README:
+  - Added 🧬 **Atom Segmentation** section with code samples.
+  - Updated ✅ Key Features to include `atoms()` and layout-centric segmentation.
+
+### Notes
+- `atoms()` is designed for terminal/TUI rendering and debugging visual width behavior.
+- It complements Unicode-compliant `graphemes()`, but does not follow UAX #29.
+
+
 ## [0.1.8] - 2025-05-27
 
 ### Added

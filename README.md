@@ -29,25 +29,63 @@ This includes:
 - Fullwidth punctuation and multilingual symbols 
 - Grapheme cluster boundary cases
 
+
 ## ✅ Key Features
 
-- ✅ Accurate width detection for emoji, CJK, Hangul, Kana, and fullwidth symbols 
-- ✅ Full support for grapheme clusters (emoji composition, regional indicators)
-- ✅ Zero dependencies, minimal API, compatible with any terminal or UI renderer 
-- ✅ Fully reproducible datasets, powered by [char-table](https://github.com/runefix-labs/char-table)
-- ✅ Language bindings planned for JS / Python / Go and more
+- ✅ Precise width detection for emoji, CJK ideographs, Kana, Hangul, fullwidth symbols
+- ✅ Unicode grapheme support via [`graphemes()`], compliant with [UAX #29]
+- ✅ Custom atom segmentation via [`atoms()`], optimized for TUI/terminal layout
+- ✅ Width-aware formatting tools: truncate, wrap, split, measure
+- ✅ Runtime layout strategies with [`WidthPolicy`] (terminal, markdown, compact)
+- ✅ Trait extensions for `char` and `str`: `.rune_width()`, `.display_width()`, etc.
+- ✅ Zero dependencies, minimal build, embeddable in any CLI, TUI, or renderer
+- ✅ Fully reproducible width tables, auto-generated from [char-table](https://github.com/runefix-labs/char-table)
 
-## 🧩 Optional: Runtime Width Policies
+
+## 🧬 Atom Segmentation
+
+> ✨ A runefix-specific alternative to Unicode graphemes
+
+Unlike standard Unicode grapheme clusters (`graphemes()`), `atoms()` segments a string into **layout-affecting units** — which directly map to visual space in terminal or TUI environments.
+
+This segmentation is **width-driven**, optimized for rendering purposes:
+
+- Groups zero-width marks (e.g. ZWJ, variation selectors) with their base 
+- Preserves emoji ZWJ sequences and CJK characters as atomic layout units 
+- Ignores linguistic rules and focuses purely on what affects layout
+
+```rust
+use runefix_core::atoms;
+
+let parts = atoms("👩‍❤️‍💋‍👨");
+assert_eq!(parts, vec!["👩", "\u{200d}", "❤", "\u{fe0f}", "\u{200d}", "💋", "\u{200d}", "👨"]);
+```
+
+This function is useful for:
+
+- Rendering-width inspection 
+- Debugging layout behavior 
+- Fine-grained control in TUI/CLI apps
+
+Tips: 🧠 For Unicode-compliant grapheme segmentation, use [`graphemes()`].
+
+
+## 🧩 Runtime Layout Policies
+
+### 🔧 Enabling Policies (opt-in)
 
 > 🧪 `--features policy` required
 
 By default, `runefix-core` uses the **terminal layout policy**, where both emoji and CJK characters occupy 2 columns. \
 You can optionally enable runtime policies to adapt to other rendering environments:
+
 ```toml
 # Cargo.toml
 runefix-core = { version = "0.1", features = ["policy"] }
 ```
+
 Then:
+
 ```rust
 use runefix_core::{WidthPolicy, WithPolicy};
 
@@ -56,9 +94,10 @@ let width = WithPolicy::new(&policy).apply("😂").display_width();
 
 assert_eq!(width, 1); // markdown prefers emoji width = 1
 ```
+
 ℹ️ _Note: Some advanced methods (like `.truncate_by_width(...)`) may require intermediate bindings due to borrowing rules of `&str`. See [`with_policy.rs`](./src/with_policy.rs) for idiomatic usage._
 
-## 🧠 Built-in Policies
+### 🧠 Built-in Policies
 
 | Policy       | Emoji | CJK | Variant | Use case                          |
 | ------------ | ----- | --- | ------- | --------------------------------- |
@@ -67,6 +106,7 @@ assert_eq!(width, 1); // markdown prefers emoji width = 1
 | `compact()`  | 1     | 1   | 1       | Logs, status bars, tight layouts  |
 
 You can also override policies dynamically at runtime for your renderer.
+
 
 ## 🚀 Quick Example
 
@@ -80,6 +120,7 @@ fn main() {
 }
 ```
 
+
 ## 📷 Real-World Examples
 
 For a full demo of grapheme-aware alignment and terminal behavior, see [examples/text_align.rs](./examples/text_align.rs).
@@ -92,6 +133,7 @@ It showcases:
 
 👉 Read more in [examples/README.md](./examples/README.md)
 
+
 ## 📦 Installation
 
 Add the following to your `Cargo.toml`:
@@ -103,6 +145,7 @@ runefix-core = "0.1"
 
 See [crates.io](https://crates.io/crates/runefix-core) for the latest version.
 
+
 ## 📚 Use Cases
 
 - 🖥️ Terminal alignment (CLI box drawing, tables)
@@ -110,6 +153,7 @@ See [crates.io](https://crates.io/crates/runefix-core) for the latest version.
 - 📊 TUI layout engines (React-style terminal UIs)
 - 📄 Editors and terminal emulators (accurate text wrapping)
 - 🧩 Width testing tools, playgrounds, and visualization platforms
+
 
 ## 📁 Dataset Sources
 
@@ -121,6 +165,7 @@ This crate relies on structured, versioned datasets from  [char-table](https://g
 
 All datasets are reproducible, regularly updated, and aligned with the latest Unicode releases.
 
+
 ## 🛠️ Project Status
 
 | Module              | Status      |
@@ -129,19 +174,23 @@ All datasets are reproducible, regularly updated, and aligned with the latest Un
 | Emoji width support | ✅ Completed |
 | Grapheme cluster    | ✅ Completed |
 
+
 ## 📌 CHANGELOG
 
 See [CHANGELOG.md](./CHANGELOG.md) for version history.
+
 
 ## 🔖 License
 
 MIT OR Apache-2.0  
 © 2025 Pokeya Z. Chen / Runefix Labs
 
+
 ## 📣 Project Affiliation
 
 This project is maintained by the [runefix-labs](https://github.com/runefix-labs) organization.
 It serves as the **core engine** for the runefix suite — a multi-language, cross-platform solution for Unicode width handling.
+
 
 ## 🌐 Contact
 

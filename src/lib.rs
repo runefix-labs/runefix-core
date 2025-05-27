@@ -15,8 +15,11 @@
 //!
 //! ## Features
 //!
+//! 🧬 **Atom API**
+//! - [`atoms`] – Runefix-specific visual segmentation for layout (width-based units)
+//! 
 //! 🧩 **Segmentation API**
-//! - [`grapheme_atoms`] – Unicode-aware grapheme cluster splitting
+//! - [`graphemes`] – Unicode-compliant grapheme cluster splitting (UAX #29)
 //!
 //! 📏 **Measurement API**
 //! - [`display_width`] – Total width of a string (grapheme-aware, terminal-style)
@@ -55,10 +58,12 @@
 
 // ───── Public APIs ─────────────────────────────────────────────
 
+// Atom-based segmentation for layout units (runefix-specific)
+pub use atom::atoms;
+
 // Grapheme-based core processing functions (always available)
 pub use grapheme::{
-    display_width, display_widths, grapheme_atoms, grapheme_widths, split_by_width,
-    truncate_by_width,
+    display_width, display_widths, grapheme_widths, graphemes, split_by_width, truncate_by_width,
 };
 
 // Unicode-aware trait extensions for `char` and `str`
@@ -86,6 +91,7 @@ pub use crate::grapheme::policy_ext::{
 
 // ───── Internal Modules (implementation details) ───────────────
 
+mod atom;
 mod consts;
 mod ext;
 mod grapheme;
