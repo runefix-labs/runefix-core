@@ -17,7 +17,7 @@
 //!
 //! 🧬 **Atom API**
 //! - [`atoms`] – Runefix-specific visual segmentation for layout (width-based units)
-//! 
+//!
 //! 🧩 **Segmentation API**
 //! - [`graphemes`] – Unicode-compliant grapheme cluster splitting (UAX #29)
 //!

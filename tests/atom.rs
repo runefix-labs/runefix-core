@@ -40,5 +40,8 @@ fn test_atoms_female_programmer() {
 #[test]
 fn test_atoms_mixed_complex() {
     let input = "123，木头人🪵";
-    assert_eq!(atoms(input), vec!["1", "2", "3", "，", "木", "头", "人", "🪵"]);
+    assert_eq!(
+        atoms(input),
+        vec!["1", "2", "3", "，", "木", "头", "人", "🪵"]
+    );
 }
