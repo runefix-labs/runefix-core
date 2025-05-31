@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.10] - 2025-05-31
+
+### Changed
+- Removed `Cargo.lock` from the published crate package.  
+  This aligns with [Rust best practices](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html) for libraries to avoid constraining downstream dependency resolution.
+
+
 ## [0.1.9] - 2025-05-27
 
 ### Added

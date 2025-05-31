@@ -1,6 +1,6 @@
 [package]
 name = "runefix-core"
-version = "0.1.9"
+version = "0.1.10"
 edition = "2024"
 rust-version = "1.85"
 
@@ -23,7 +23,6 @@ categories = ["text-processing", "development-tools", "localization"]
 include = [
     "src/**",
     "Cargo.toml",
-    "Cargo.lock",
     "README.md",
     "README_zh.md",
     "README_ja.md",
