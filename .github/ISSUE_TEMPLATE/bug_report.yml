@@ -1,0 +1,37 @@
+name: "🐛 Bug Report"
+description: Report unexpected character width or segmentation behavior
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve `runefix-core`! Please provide details about the bug.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the issue clearly — what behavior did you observe?
+      placeholder: "e.g., The grapheme '👨‍👩‍👦' is reported as width=4, but should be 2."
+    validations:
+      required: true
+  - type: input
+    id: test-string
+    attributes:
+      label: Example string
+      placeholder: "e.g., 👨‍👩‍👦"
+  - type: input
+    id: expected-width
+    attributes:
+      label: Expected width
+      placeholder: "e.g., 2"
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "e.g., Ubuntu 22.04, Rust 1.77.1"
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      placeholder: Optional links, screenshots, or logs
